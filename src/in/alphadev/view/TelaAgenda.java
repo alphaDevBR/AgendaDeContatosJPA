@@ -7,7 +7,11 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 public class TelaAgenda extends javax.swing.JFrame {
 
+  private String temaDefault = "";
+
   public TelaAgenda() {
+
+    getTemaDefault();
     initComponents();
   }
 
@@ -375,6 +379,10 @@ public class TelaAgenda extends javax.swing.JFrame {
     }
   }
 
+  private void getTemaDefault() {
+    temaDefault = UIManager.getCrossPlatformLookAndFeelClassName();
+    System.out.println( "Tema Default:" + temaDefault );
+  }
 
     private void mnuTrocarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuTrocarUsuarioActionPerformed
       chamaTelaLogin();
@@ -431,6 +439,7 @@ public class TelaAgenda extends javax.swing.JFrame {
 
       JOptionPane.showMessageDialog(null, "Tema não suportado neste S.O.",
           "Atenção", JOptionPane.INFORMATION_MESSAGE);
+      mudaLaF( temaDefault );
 
     }
 

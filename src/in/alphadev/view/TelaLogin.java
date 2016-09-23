@@ -144,10 +144,10 @@ public class TelaLogin extends javax.swing.JDialog {
 
     private void btnLogarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogarActionPerformed
 
-      EntityManagerFactory factory = Persistence.createEntityManagerFactory("AgendaDeContatosPU");
+      EntityManagerFactory factory = Persistence.createEntityManagerFactory( "AgendaDeContatosJPAPU" );
       EntityManager manager = factory.createEntityManager();
 
-      Query query = manager.createNamedQuery("Usuarios.findByUsuarioESenha");
+      Query query = manager.createNamedQuery( "Usuarios.findByUsuarioAndSenha" );
       query.setParameter("usuario", txtUsuario.getText());
       query.setParameter("senha", txtSenha.getText());
 
