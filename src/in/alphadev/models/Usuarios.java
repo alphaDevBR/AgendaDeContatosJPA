@@ -200,4 +200,5 @@ public class Usuarios implements Serializable {
     return "in.alphadev.models.Usuarios[ id=" + id + " ]";
   }
 
+
 }

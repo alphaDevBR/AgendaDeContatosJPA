@@ -5,10 +5,8 @@
  */
 package in.alphadev.models;
 
-import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -70,7 +68,7 @@ public class Contatos implements Serializable {
   private Date dataNas;
   // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
   @Column(name = "salario", precision = 10, scale = 2)
-  private BigDecimal salario;
+  private float salario;
 
   public Contatos() {
   }
@@ -156,12 +154,12 @@ public class Contatos implements Serializable {
     changeSupport.firePropertyChange( "dataNas", oldDataNas, dataNas );
   }
 
-  public BigDecimal getSalario() {
+  public float getSalario() {
     return salario;
   }
 
-  public void setSalario( BigDecimal salario ) {
-    BigDecimal oldSalario = this.salario;
+  public void setSalario( float salario ) {
+    float oldSalario = this.salario;
     this.salario = salario;
     changeSupport.firePropertyChange( "salario", oldSalario, salario );
   }
@@ -190,13 +188,4 @@ public class Contatos implements Serializable {
   public String toString() {
     return "in.alphadev.models.Contatos[ id=" + id + " ]";
   }
-
-  public void addPropertyChangeListener( PropertyChangeListener listener ) {
-    changeSupport.addPropertyChangeListener( listener );
-  }
-
-  public void removePropertyChangeListener( PropertyChangeListener listener ) {
-    changeSupport.removePropertyChangeListener( listener );
-  }
-
 }
