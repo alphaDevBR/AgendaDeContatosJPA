@@ -37,6 +37,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Contatos.findByEmail", query = "SELECT c FROM Contatos c WHERE c.email = :email"),
     @NamedQuery(name = "Contatos.findByDataNas", query = "SELECT c FROM Contatos c WHERE c.dataNas = :dataNas"),
     @NamedQuery(name = "Contatos.findBySalario", query = "SELECT c FROM Contatos c WHERE c.salario = :salario")})
+
 public class Contatos implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -45,32 +46,25 @@ public class Contatos implements Serializable {
     @Basic(optional = false)
     @Column(nullable = false)
     private Integer id;
- 
     @Basic(optional = false)
     @Column(nullable = false, length = 50)
     private String nome;
-    
     @Basic(optional = false)
     @Column(nullable = false)
-    private Character sexo;
-    
+    private String sexo;
     @Basic(optional = false)
     @Column(name = "fone_res", nullable = false, length = 15)
     private String foneRes;
-    
     @Basic(optional = false)
     @Column(name = "fone_cel", nullable = false, length = 15)
     private String foneCel;
-    
     @Basic(optional = false)
     @Column(nullable = false, length = 50)
     private String email;
-    
     @Basic(optional = false)
     @Column(name = "data_nas", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date dataNas;
-    
     @Basic(optional = false)
     @Column(nullable = false)
     private float salario;
@@ -82,7 +76,7 @@ public class Contatos implements Serializable {
         this.id = id;
     }
 
-    public Contatos(Integer id, String nome, Character sexo, String foneRes, String foneCel, String email, Date dataNas, float salario) {
+    public Contatos(Integer id, String nome, String sexo, String foneRes, String foneCel, String email, Date dataNas, float salario) {
         this.id = id;
         this.nome = nome;
         this.sexo = sexo;
@@ -109,11 +103,11 @@ public class Contatos implements Serializable {
         this.nome = nome;
     }
 
-    public Character getSexo() {
+    public String getSexo() {
         return sexo;
     }
 
-    public void setSexo(Character sexo) {
+    public void setSexo(String sexo) {
         this.sexo = sexo;
     }
 

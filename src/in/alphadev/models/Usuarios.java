@@ -38,50 +38,37 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Usuarios.findByEmail", query = "SELECT u FROM Usuarios u WHERE u.email = :email"),
     @NamedQuery(name = "Usuarios.findByCreateAt", query = "SELECT u FROM Usuarios u WHERE u.createAt = :createAt"),
     @NamedQuery(name = "Usuarios.findByUpdateAt", query = "SELECT u FROM Usuarios u WHERE u.updateAt = :updateAt"),
-    @NamedQuery(name = "Usuarios.findByDeleteAt", query = "SELECT u FROM Usuarios u WHERE u.deleteAt = :deleteAt"),
-    @NamedQuery(name = "Usuarios.findByUsuarioESenha", query = "SELECT u FROM Usuarios u WHERE u.usuario = :usuario AND u.senha = :senha")
-})
-
+    @NamedQuery(name = "Usuarios.findByDeleteAt", query = "SELECT u FROM Usuarios u WHERE u.deleteAt = :deleteAt")})
 public class Usuarios implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(nullable = false)
     private Integer id;
-
     @Basic(optional = false)
     @Column(nullable = false, length = 40)
     private String nome;
-
     @Basic(optional = false)
     @Column(nullable = false, length = 15)
     private String usuario;
-
     @Basic(optional = false)
     @Column(nullable = false, length = 15)
     private String senha;
-
     @Basic(optional = false)
     @Column(nullable = false, length = 15)
     private String nivel;
-
     @Column(length = 50)
     private String tema;
-
     @Column(length = 50)
     private String email;
-
     @Column(name = "create_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createAt;
-
     @Column(name = "update_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateAt;
-
     @Column(name = "delete_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date deleteAt;
@@ -203,7 +190,7 @@ public class Usuarios implements Serializable {
 
     @Override
     public String toString() {
-        return "modelo.Usuarios[ id=" + id + " ]";
+        return "in.alphadev.models.Usuarios[ id=" + id + " ]";
     }
     
 }
