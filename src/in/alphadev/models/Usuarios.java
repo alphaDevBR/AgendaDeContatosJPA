@@ -1,3 +1,8 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package in.alphadev.models;
 
 import java.io.Serializable;
@@ -15,52 +20,59 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ *
+ * @author fernando
+ */
 @Entity
-@Table(name = "usuarios", catalog = "db_fatec", schema = "")
+@Table(catalog = "db_fatec", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Usuarios.findAll", query = "SELECT u FROM Usuarios u"),
     @NamedQuery(name = "Usuarios.findById", query = "SELECT u FROM Usuarios u WHERE u.id = :id"),
     @NamedQuery(name = "Usuarios.findByNome", query = "SELECT u FROM Usuarios u WHERE u.nome = :nome"),
-    @NamedQuery(name = "Usuarios.findByNivel", query = "SELECT u FROM Usuarios u WHERE u.nivel = :nivel"),
     @NamedQuery(name = "Usuarios.findByUsuario", query = "SELECT u FROM Usuarios u WHERE u.usuario = :usuario"),
     @NamedQuery(name = "Usuarios.findBySenha", query = "SELECT u FROM Usuarios u WHERE u.senha = :senha"),
-    @NamedQuery(name = "Usuarios.findByEmail", query = "SELECT u FROM Usuarios u WHERE u.email = :email"),
+    @NamedQuery(name = "Usuarios.findByNivel", query = "SELECT u FROM Usuarios u WHERE u.nivel = :nivel"),
     @NamedQuery(name = "Usuarios.findByTema", query = "SELECT u FROM Usuarios u WHERE u.tema = :tema"),
-    @NamedQuery(name = "Usuarios.findByUsuarioESenha", query = "SELECT u FROM Usuarios u WHERE u.usuario = :usuario and u.senha = :senha")})
+    @NamedQuery(name = "Usuarios.findByEmail", query = "SELECT u FROM Usuarios u WHERE u.email = :email"),
+    @NamedQuery(name = "Usuarios.findByCreateAt", query = "SELECT u FROM Usuarios u WHERE u.createAt = :createAt"),
+    @NamedQuery(name = "Usuarios.findByUpdateAt", query = "SELECT u FROM Usuarios u WHERE u.updateAt = :updateAt"),
+    @NamedQuery(name = "Usuarios.findByDeleteAt", query = "SELECT u FROM Usuarios u WHERE u.deleteAt = :deleteAt"),
+    @NamedQuery(name = "Usuarios.findByUsuarioESenha", query = "SELECT u FROM Usuarios u WHERE u.usuario = :usuario AND u.senha = :senha")
+})
 
 public class Usuarios implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id", nullable = false)
+    @Column(nullable = false)
     private Integer id;
 
     @Basic(optional = false)
-    @Column(name = "nome", nullable = false, length = 40)
+    @Column(nullable = false, length = 40)
     private String nome;
 
     @Basic(optional = false)
-    @Column(name = "nivel", nullable = false, length = 20)
-    private String nivel;
-
-    @Basic(optional = false)
-    @Column(name = "usuario", nullable = false, length = 20)
+    @Column(nullable = false, length = 15)
     private String usuario;
 
     @Basic(optional = false)
-    @Column(name = "senha", nullable = false, length = 15)
+    @Column(nullable = false, length = 15)
     private String senha;
 
     @Basic(optional = false)
-    @Column(name = "email", nullable = false, length = 50)
-    private String email;
+    @Column(nullable = false, length = 15)
+    private String nivel;
 
-    @Basic(optional = false)
-    @Column(name = "tema", nullable = false, length = 50)
+    @Column(length = 50)
     private String tema;
+
+    @Column(length = 50)
+    private String email;
 
     @Column(name = "create_at")
     @Temporal(TemporalType.TIMESTAMP)
@@ -81,14 +93,12 @@ public class Usuarios implements Serializable {
         this.id = id;
     }
 
-    public Usuarios(Integer id, String nome, String nivel, String usuario, String senha, String email, String tema) {
+    public Usuarios(Integer id, String nome, String usuario, String senha, String nivel) {
         this.id = id;
         this.nome = nome;
-        this.nivel = nivel;
         this.usuario = usuario;
         this.senha = senha;
-        this.email = email;
-        this.tema = tema;
+        this.nivel = nivel;
     }
 
     public Integer getId() {
@@ -107,14 +117,6 @@ public class Usuarios implements Serializable {
         this.nome = nome;
     }
 
-    public String getNivel() {
-        return nivel;
-    }
-
-    public void setNivel(String nivel) {
-        this.nivel = nivel;
-    }
-
     public String getUsuario() {
         return usuario;
     }
@@ -131,12 +133,12 @@ public class Usuarios implements Serializable {
         this.senha = senha;
     }
 
-    public String getEmail() {
-        return email;
+    public String getNivel() {
+        return nivel;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setNivel(String nivel) {
+        this.nivel = nivel;
     }
 
     public String getTema() {
@@ -145,6 +147,14 @@ public class Usuarios implements Serializable {
 
     public void setTema(String tema) {
         this.tema = tema;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Date getCreateAt() {
@@ -193,7 +203,7 @@ public class Usuarios implements Serializable {
 
     @Override
     public String toString() {
-        return "in.alphadev.models.Usuarios[ id=" + id + " ]";
+        return "modelo.Usuarios[ id=" + id + " ]";
     }
     
 }

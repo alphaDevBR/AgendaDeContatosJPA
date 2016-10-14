@@ -5,10 +5,7 @@
  */
 package in.alphadev.models;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -21,7 +18,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -29,7 +25,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author fernando
  */
 @Entity
-@Table(name = "contatos", catalog = "db_fatec", schema = "")
+@Table(catalog = "db_fatec", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Contatos.findAll", query = "SELECT c FROM Contatos c"),
@@ -41,47 +37,44 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Contatos.findByEmail", query = "SELECT c FROM Contatos c WHERE c.email = :email"),
     @NamedQuery(name = "Contatos.findByDataNas", query = "SELECT c FROM Contatos c WHERE c.dataNas = :dataNas"),
     @NamedQuery(name = "Contatos.findBySalario", query = "SELECT c FROM Contatos c WHERE c.salario = :salario")})
-
 public class Contatos implements Serializable {
 
-    @Transient
-    private PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
-
     private static final long serialVersionUID = 1L;
-    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id", nullable = false)
+    @Column(nullable = false)
     private Integer id;
-    
+ 
     @Basic(optional = false)
-    @Column(name = "nome", nullable = false, length = 40)
+    @Column(nullable = false, length = 50)
     private String nome;
     
     @Basic(optional = false)
-    @Column(name = "sexo", nullable = false, length = 1)
-    private String sexo;
+    @Column(nullable = false)
+    private Character sexo;
     
-    @Column(name = "fone_res", length = 15)
+    @Basic(optional = false)
+    @Column(name = "fone_res", nullable = false, length = 15)
     private String foneRes;
     
-    @Column(name = "fone_cel", length = 15)
+    @Basic(optional = false)
+    @Column(name = "fone_cel", nullable = false, length = 15)
     private String foneCel;
     
     @Basic(optional = false)
-    @Column(name = "email", nullable = false, length = 50)
+    @Column(nullable = false, length = 50)
     private String email;
     
-    @Column(name = "data_nas")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Basic(optional = false)
+    @Column(name = "data_nas", nullable = false)
+    @Temporal(TemporalType.DATE)
     private Date dataNas;
     
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Column(name = "salario", precision = 10, scale = 2)
-    private BigDecimal salario;
+    @Basic(optional = false)
+    @Column(nullable = false)
+    private float salario;
 
-    
     public Contatos() {
     }
 
@@ -89,11 +82,15 @@ public class Contatos implements Serializable {
         this.id = id;
     }
 
-    public Contatos(Integer id, String nome, String sexo, String email) {
+    public Contatos(Integer id, String nome, Character sexo, String foneRes, String foneCel, String email, Date dataNas, float salario) {
         this.id = id;
         this.nome = nome;
         this.sexo = sexo;
+        this.foneRes = foneRes;
+        this.foneCel = foneCel;
         this.email = email;
+        this.dataNas = dataNas;
+        this.salario = salario;
     }
 
     public Integer getId() {
@@ -101,9 +98,7 @@ public class Contatos implements Serializable {
     }
 
     public void setId(Integer id) {
-        Integer oldId = this.id;
         this.id = id;
-        changeSupport.firePropertyChange("id", oldId, id);
     }
 
     public String getNome() {
@@ -111,19 +106,15 @@ public class Contatos implements Serializable {
     }
 
     public void setNome(String nome) {
-        String oldNome = this.nome;
         this.nome = nome;
-        changeSupport.firePropertyChange("nome", oldNome, nome);
     }
 
-    public String getSexo() {
+    public Character getSexo() {
         return sexo;
     }
 
-    public void setSexo(String sexo) {
-        String oldSexo = this.sexo;
+    public void setSexo(Character sexo) {
         this.sexo = sexo;
-        changeSupport.firePropertyChange("sexo", oldSexo, sexo);
     }
 
     public String getFoneRes() {
@@ -131,9 +122,7 @@ public class Contatos implements Serializable {
     }
 
     public void setFoneRes(String foneRes) {
-        String oldFoneRes = this.foneRes;
         this.foneRes = foneRes;
-        changeSupport.firePropertyChange("foneRes", oldFoneRes, foneRes);
     }
 
     public String getFoneCel() {
@@ -141,9 +130,7 @@ public class Contatos implements Serializable {
     }
 
     public void setFoneCel(String foneCel) {
-        String oldFoneCel = this.foneCel;
         this.foneCel = foneCel;
-        changeSupport.firePropertyChange("foneCel", oldFoneCel, foneCel);
     }
 
     public String getEmail() {
@@ -151,9 +138,7 @@ public class Contatos implements Serializable {
     }
 
     public void setEmail(String email) {
-        String oldEmail = this.email;
         this.email = email;
-        changeSupport.firePropertyChange("email", oldEmail, email);
     }
 
     public Date getDataNas() {
@@ -161,19 +146,15 @@ public class Contatos implements Serializable {
     }
 
     public void setDataNas(Date dataNas) {
-        Date oldDataNas = this.dataNas;
         this.dataNas = dataNas;
-        changeSupport.firePropertyChange("dataNas", oldDataNas, dataNas);
     }
 
-    public BigDecimal getSalario() {
+    public float getSalario() {
         return salario;
     }
 
-    public void setSalario(BigDecimal salario) {
-        BigDecimal oldSalario = this.salario;
+    public void setSalario(float salario) {
         this.salario = salario;
-        changeSupport.firePropertyChange("salario", oldSalario, salario);
     }
 
     @Override
@@ -199,14 +180,6 @@ public class Contatos implements Serializable {
     @Override
     public String toString() {
         return "in.alphadev.models.Contatos[ id=" + id + " ]";
-    }
-
-    public void addPropertyChangeListener(PropertyChangeListener listener) {
-        changeSupport.addPropertyChangeListener(listener);
-    }
-
-    public void removePropertyChangeListener(PropertyChangeListener listener) {
-        changeSupport.removePropertyChangeListener(listener);
     }
     
 }
