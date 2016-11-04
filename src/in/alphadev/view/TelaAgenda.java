@@ -381,7 +381,7 @@ public class TelaAgenda extends javax.swing.JFrame {
 
   private void getTemaDefault() {
     temaDefault = UIManager.getCrossPlatformLookAndFeelClassName();
-    System.out.println( "Tema Default:" + temaDefault );
+//    System.out.println( "Tema Default:" + temaDefault );
   }
 
     private void mnuTrocarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuTrocarUsuarioActionPerformed
