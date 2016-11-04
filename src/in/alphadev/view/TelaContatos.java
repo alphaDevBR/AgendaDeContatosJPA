@@ -10,6 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
@@ -46,11 +47,11 @@ public class TelaContatos extends javax.swing.JDialog {
         int totRegistros = tblContatos.getRowCount();
         DefaultTableModel dtm = (DefaultTableModel) tblContatos.getModel();
 
-        while(totRegistros > 0) {
+        while (totRegistros > 0) {
             dtm.removeRow(0);
             totRegistros--;
         }
-        
+
         tblContatos.setRowSorter(new TableRowSorter(dtm));
 
         List<Contatos> contatos = LeContatos();
@@ -164,6 +165,11 @@ public class TelaContatos extends javax.swing.JDialog {
         btnExcluir.setMaximumSize(new java.awt.Dimension(40, 40));
         btnExcluir.setMinimumSize(new java.awt.Dimension(40, 40));
         btnExcluir.setPreferredSize(new java.awt.Dimension(40, 40));
+        btnExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluirActionPerformed(evt);
+            }
+        });
 
         btnFechar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/in/alphadev/imagens/0237.png"))); // NOI18N
         btnFechar.setText("Fechar");
@@ -320,6 +326,14 @@ public class TelaContatos extends javax.swing.JDialog {
             }
         });
         jScrollPane1.setViewportView(tblContatos);
+        if (tblContatos.getColumnModel().getColumnCount() > 0) {
+            tblContatos.getColumnModel().getColumn(0).setMinWidth(100);
+            tblContatos.getColumnModel().getColumn(0).setPreferredWidth(100);
+            tblContatos.getColumnModel().getColumn(0).setMaxWidth(100);
+            tblContatos.getColumnModel().getColumn(1).setMinWidth(250);
+            tblContatos.getColumnModel().getColumn(1).setPreferredWidth(250);
+            tblContatos.getColumnModel().getColumn(1).setMaxWidth(250);
+        }
 
         jLabel9.setText("Pesquisa:");
 
@@ -388,9 +402,9 @@ public class TelaContatos extends javax.swing.JDialog {
   }//GEN-LAST:event_btnFecharActionPerformed
 
   private void tblContatosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblContatosMouseClicked
-      setIdContato(
-              (Integer) tblContatos.getValueAt(
-                      tblContatos.getSelectedRow(), 0));
+      int id = (Integer) tblContatos.getValueAt(
+              tblContatos.getSelectedRow(), 0);
+      setIdContato(id);
       exibeContato();
   }//GEN-LAST:event_tblContatosMouseClicked
 
@@ -409,7 +423,10 @@ public class TelaContatos extends javax.swing.JDialog {
   private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
       SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
-      EntityManagerFactory factory = Persistence.createEntityManagerFactory("AgendaDeContatosJPAPU");
+      EntityManagerFactory factory
+              = Persistence.createEntityManagerFactory(
+                      "AgendaDeContatosPU");
+
       EntityManager manager = factory.createEntityManager();
 
       Contatos contato = new Contatos();
@@ -417,6 +434,7 @@ public class TelaContatos extends javax.swing.JDialog {
       try {
 
           contato.setNome(txtNome.getText());
+
           contato.setDataNas(sdf.parse(txtDtNasc.getText()));
           contato.setEmail(txtEmail.getText());
           contato.setFoneCel(txtFoneCel.getText());
@@ -438,14 +456,41 @@ public class TelaContatos extends javax.swing.JDialog {
           preencheTabela();
       } catch (ParseException ex) {
 
-          Logger.getLogger(TelaContatos.class.getName()).log(Level.SEVERE, null, ex);
+          Logger.getLogger(TelaContatos.class.getName()).
+                  log(Level.SEVERE, null, ex);
 
       }
   }//GEN-LAST:event_btnSalvarActionPerformed
 
-    private void exibeContato() {
+    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
+
         EntityManagerFactory factory = Persistence.createEntityManagerFactory("AgendaDeContatosJPAPU");
         EntityManager manager = factory.createEntityManager();
+
+        int resp = JOptionPane.showConfirmDialog(null,
+                "Confirma a exclusão do registro?", "Atenção",
+                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+        if (resp == JOptionPane.YES_OPTION) {
+            Contatos contato = manager.find(Contatos.class,
+                    Integer.parseInt(txtID.getText()));
+
+            manager.getTransaction().begin();
+            manager.remove(contato);
+            manager.getTransaction().commit();
+        }
+        
+        manager.close();
+        factory.close();
+
+        preencheTabela();
+    }//GEN-LAST:event_btnExcluirActionPerformed
+
+    private void exibeContato() {
+        EntityManagerFactory factory
+                = Persistence.createEntityManagerFactory("AgendaDeContatosJPAPU");
+        EntityManager manager
+                = factory.createEntityManager();
 
         Query query = manager.createNamedQuery("Contatos.findById");
         query.setParameter("id", getIdContato());
@@ -463,11 +508,13 @@ public class TelaContatos extends javax.swing.JDialog {
         txtNome.setText(contato.getNome());
         txtFoneRes.setText(contato.getFoneRes());
         txtFoneCel.setText(contato.getFoneCel());
+
         if (contato.getSexo().equals("M")) {
             opcMasculino.setSelected(true);
         } else {
             opcFeminino.setSelected(true);
         }
+
         txtEmail.setText(contato.getEmail());
         txtDtNasc.setText(dataNasc.format(contato.getDataNas()));
         txtSalario.setText(String.valueOf(contato.getSalario()));
