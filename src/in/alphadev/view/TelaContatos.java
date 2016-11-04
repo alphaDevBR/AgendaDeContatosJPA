@@ -15,13 +15,13 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
 public class TelaContatos extends javax.swing.JDialog {
-
+    
     private int idContato;
-
+    
     public int getIdContato() {
         return idContato;
     }
-
+    
     public void setIdContato(int idContato) {
         this.idContato = idContato;
     }
@@ -30,14 +30,14 @@ public class TelaContatos extends javax.swing.JDialog {
     private List<Contatos> LeContatos() {
         EntityManagerFactory factory = Persistence.createEntityManagerFactory("AgendaDeContatosJPAPU");
         EntityManager manager = factory.createEntityManager();
-
+        
         Query query = manager.createNamedQuery("Contatos.findAll");
-
+        
         List<Contatos> contato = query.getResultList();
-
+        
         manager.close();
         factory.close();
-
+        
         return contato;
     }
 
@@ -46,16 +46,16 @@ public class TelaContatos extends javax.swing.JDialog {
     private void preencheTabela() {
         int totRegistros = tblContatos.getRowCount();
         DefaultTableModel dtm = (DefaultTableModel) tblContatos.getModel();
-
+        
         while (totRegistros > 0) {
             dtm.removeRow(0);
             totRegistros--;
         }
-
+        
         tblContatos.setRowSorter(new TableRowSorter(dtm));
-
+        
         List<Contatos> contatos = LeContatos();
-
+        
         for (Contatos contato : contatos) {
             dtm.addRow(new Object[]{
                 contato.getId(),
@@ -64,13 +64,13 @@ public class TelaContatos extends javax.swing.JDialog {
             });
         }
     }
-
+    
     public TelaContatos(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         preencheTabela();
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -416,25 +416,25 @@ public class TelaContatos extends javax.swing.JDialog {
       txtFoneCel.setText("");
       txtSalario.setText("");
       txtEmail.setText("");
-
+      
       txtNome.requestFocus();
   }//GEN-LAST:event_btnNovoActionPerformed
 
   private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
       SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-
+      
       EntityManagerFactory factory
               = Persistence.createEntityManagerFactory(
-                      "AgendaDeContatosPU");
-
+                      "AgendaDeContatosJPAPU");
+      
       EntityManager manager = factory.createEntityManager();
-
+      
       Contatos contato = new Contatos();
-
+      
       try {
-
+          
           contato.setNome(txtNome.getText());
-
+          
           contato.setDataNas(sdf.parse(txtDtNasc.getText()));
           contato.setEmail(txtEmail.getText());
           contato.setFoneCel(txtFoneCel.getText());
@@ -445,36 +445,44 @@ public class TelaContatos extends javax.swing.JDialog {
           } else {
               contato.setSexo("F");
           }
-
+          
           manager.getTransaction().begin();
-          manager.persist(contato);
-          manager.getTransaction().commit();
 
+          if (txtID.equals("")) {
+              manager.persist(contato);
+          } else {
+              contato.setId(Integer.parseInt(txtID.getText()));
+              manager.merge(contato);
+          }
+
+          manager.getTransaction().commit();
+          
           manager.close();
           factory.close();
-
+          
           preencheTabela();
       } catch (ParseException ex) {
-
+          
           Logger.getLogger(TelaContatos.class.getName()).
                   log(Level.SEVERE, null, ex);
-
+          
       }
   }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
-
-        EntityManagerFactory factory = Persistence.createEntityManagerFactory("AgendaDeContatosJPAPU");
+        
+        EntityManagerFactory factory = Persistence.createEntityManagerFactory(
+                "AgendaDeContatosJPAPU");
         EntityManager manager = factory.createEntityManager();
-
+        
         int resp = JOptionPane.showConfirmDialog(null,
                 "Confirma a exclusão do registro?", "Atenção",
                 JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-
+        
         if (resp == JOptionPane.YES_OPTION) {
             Contatos contato = manager.find(Contatos.class,
                     Integer.parseInt(txtID.getText()));
-
+            
             manager.getTransaction().begin();
             manager.remove(contato);
             manager.getTransaction().commit();
@@ -482,39 +490,39 @@ public class TelaContatos extends javax.swing.JDialog {
         
         manager.close();
         factory.close();
-
+        
         preencheTabela();
     }//GEN-LAST:event_btnExcluirActionPerformed
-
+    
     private void exibeContato() {
         EntityManagerFactory factory
                 = Persistence.createEntityManagerFactory("AgendaDeContatosJPAPU");
         EntityManager manager
                 = factory.createEntityManager();
-
+        
         Query query = manager.createNamedQuery("Contatos.findById");
         query.setParameter("id", getIdContato());
-
+        
         List<Contatos> contato = query.getResultList();
-
+        
         mostraDados(contato.get(0));
         manager.close();
     }
-
+    
     private void mostraDados(Contatos contato) {
         SimpleDateFormat dataNasc = new SimpleDateFormat("dd/MM/yyyy");
-
+        
         txtID.setText(contato.getId().toString());
         txtNome.setText(contato.getNome());
         txtFoneRes.setText(contato.getFoneRes());
         txtFoneCel.setText(contato.getFoneCel());
-
+        
         if (contato.getSexo().equals("M")) {
             opcMasculino.setSelected(true);
         } else {
             opcFeminino.setSelected(true);
         }
-
+        
         txtEmail.setText(contato.getEmail());
         txtDtNasc.setText(dataNasc.format(contato.getDataNas()));
         txtSalario.setText(String.valueOf(contato.getSalario()));
