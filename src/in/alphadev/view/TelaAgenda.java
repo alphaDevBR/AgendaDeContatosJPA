@@ -7,21 +7,21 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 public class TelaAgenda extends javax.swing.JFrame {
 
-  private String temaDefault = "";
+    private String temaDefault = "";
 
-  public TelaAgenda() {
+    public TelaAgenda() {
 
-    getTemaDefault();
-    initComponents();
-  }
+        getTemaDefault();
+        initComponents();
+    }
 
-  public static void main(String args[]) {
-    java.awt.EventQueue.invokeLater(() -> {
-      new TelaAgenda().setVisible(true);
-    });
-  }
+    public static void main(String args[]) {
+        java.awt.EventQueue.invokeLater(() -> {
+            new TelaAgenda().setVisible(true);
+        });
+    }
 
-  @SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -306,144 +306,147 @@ public class TelaAgenda extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void mnuSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSairActionPerformed
-      System.exit(0);
+        System.exit(0);
     }//GEN-LAST:event_mnuSairActionPerformed
 
     private void mnuGTKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuGTKActionPerformed
-      mudaLaF("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
+        mudaLaF("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
     }//GEN-LAST:event_mnuGTKActionPerformed
 
     private void mnuNimbusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuNimbusActionPerformed
-      mudaLaF("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+        mudaLaF("javax.swing.plaf.nimbus.NimbusLookAndFeel");
     }//GEN-LAST:event_mnuNimbusActionPerformed
 
     private void mnuMacOSXActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuMacOSXActionPerformed
-      mudaLaF("com.apple.laf.AquaLookAndFeel");
+        mudaLaF("com.apple.laf.AquaLookAndFeel");
     }//GEN-LAST:event_mnuMacOSXActionPerformed
 
     private void mnuAluminiumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuAluminiumActionPerformed
-      mudaLaF("com.jtattoo.plaf.aluminium.AluminiumLookAndFeel");
+        mudaLaF("com.jtattoo.plaf.aluminium.AluminiumLookAndFeel");
     }//GEN-LAST:event_mnuAluminiumActionPerformed
 
     private void mnuWindowsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuWindowsActionPerformed
-      mudaLaF("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+        mudaLaF("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
     }//GEN-LAST:event_mnuWindowsActionPerformed
 
-  private void chamaTelaLogin() {
-    TelaLogin telaLogin = new TelaLogin(this, true);
-    telaLogin.setVisible(true);
+    private void chamaTelaLogin() {
+        String temaUsuario = null;
 
-    if (!telaLogin.getNomeUsuario().equals("não identificado")) {
-      lblUsuario.setText(telaLogin.getNomeUsuario());
-      lblNivel.setText(telaLogin.getNivelUsuario());
+        TelaLogin telaLogin = new TelaLogin(this, true);
+        telaLogin.setVisible(true);
 
-      checaSistemaOperacional();
+        if (!telaLogin.getNomeUsuario().equals("não identificado")) {
+            lblUsuario.setText(telaLogin.getNomeUsuario());
+            lblNivel.setText(telaLogin.getNivelUsuario());
 
-      if (!telaLogin.getTemaUsuario().trim().isEmpty()) {
-        mudaLaF(telaLogin.getTemaUsuario());
-      }
+            checaSistemaOperacional();
+
+            temaUsuario = telaLogin.getTemaUsuario();
+
+            if (temaUsuario != null && !temaUsuario.trim().isEmpty()) {
+                mudaLaF(telaLogin.getTemaUsuario());
+            }
+        }
+
+        telaLogin.dispose();
+
+        if (lblUsuario.getText().equals("não identificado")) {
+            System.exit(0);
+        }
     }
 
-    telaLogin.dispose();
+    private void checaSistemaOperacional() {
+        String nomeSO = "não definido";
 
-    if (lblUsuario.getText().equals("não identificado")) {
-      System.exit(0);
-    }
-  }
-
-  private void checaSistemaOperacional() {
-    String nomeSO = "não definido";
-
-    nomeSO = System.getProperty("os.name");
-    lblSO.setText(nomeSO);
-    ativaTemas(nomeSO);
-  }
-
-  private void ativaTemas(String nomeSO) {
-    mnuGTK.setEnabled(false);
-    mnuMacOSX.setEnabled(false);
-    mnuWindows.setEnabled(false);
-    mnuWindowsClassic.setEnabled(false);
-
-    if (nomeSO.contains("Windows")) {
-      mnuWindows.setEnabled(true);
-      mnuWindowsClassic.setEnabled(true);
+        nomeSO = System.getProperty("os.name");
+        lblSO.setText(nomeSO);
+        ativaTemas(nomeSO);
     }
 
-    if (nomeSO.contains("Mac")) {
-      mnuMacOSX.setEnabled(true);
+    private void ativaTemas(String nomeSO) {
+        mnuGTK.setEnabled(false);
+        mnuMacOSX.setEnabled(false);
+        mnuWindows.setEnabled(false);
+        mnuWindowsClassic.setEnabled(false);
+
+        if (nomeSO.contains("Windows")) {
+            mnuWindows.setEnabled(true);
+            mnuWindowsClassic.setEnabled(true);
+        }
+
+        if (nomeSO.contains("Mac")) {
+            mnuMacOSX.setEnabled(true);
+        }
+
+        if (nomeSO.contains("Linux")) {
+            mnuGTK.setEnabled(true);
+        }
     }
 
-    if (nomeSO.contains("Linux")) {
-      mnuGTK.setEnabled(true);
+    private void getTemaDefault() {
+        temaDefault = UIManager.getCrossPlatformLookAndFeelClassName();
     }
-  }
-
-  private void getTemaDefault() {
-    temaDefault = UIManager.getCrossPlatformLookAndFeelClassName();
-//    System.out.println( "Tema Default:" + temaDefault );
-  }
 
     private void mnuTrocarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuTrocarUsuarioActionPerformed
-      chamaTelaLogin();
+        chamaTelaLogin();
     }//GEN-LAST:event_mnuTrocarUsuarioActionPerformed
 
   private void mnuWindowsClassicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuWindowsClassicActionPerformed
-    mudaLaF("com.sun.java.swing.plaf.windowsclassic.WindowsClassicLookAndFeel");
+      mudaLaF("com.sun.java.swing.plaf.windowsclassic.WindowsClassicLookAndFeel");
   }//GEN-LAST:event_mnuWindowsClassicActionPerformed
 
   private void mnuGraphiteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuGraphiteActionPerformed
-    mudaLaF("com.jtattoo.plaf.graphite.GraphiteLookAndFeel");
+      mudaLaF("com.jtattoo.plaf.graphite.GraphiteLookAndFeel");
   }//GEN-LAST:event_mnuGraphiteActionPerformed
 
   private void mnuAeroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuAeroActionPerformed
-    mudaLaF("com.jtattoo.plaf.aero.AeroLookAndFeel");
+      mudaLaF("com.jtattoo.plaf.aero.AeroLookAndFeel");
   }//GEN-LAST:event_mnuAeroActionPerformed
 
   private void mnuMintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuMintActionPerformed
-    mudaLaF("com.jtattoo.plaf.mint.MintLookAndFeel");
+      mudaLaF("com.jtattoo.plaf.mint.MintLookAndFeel");
   }//GEN-LAST:event_mnuMintActionPerformed
 
   private void mnuPlasticActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuPlasticActionPerformed
-    mudaLaF("com.jgoodies.looks.plastic.PlasticLookAndFeel");
+      mudaLaF("com.jgoodies.looks.plastic.PlasticLookAndFeel");
   }//GEN-LAST:event_mnuPlasticActionPerformed
 
   private void mnuMetalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuMetalActionPerformed
-    mudaLaF("javax.swing.plaf.metal.MetalLookAndFeel");
+      mudaLaF("javax.swing.plaf.metal.MetalLookAndFeel");
   }//GEN-LAST:event_mnuMetalActionPerformed
 
   private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-    chamaTelaLogin();
+      chamaTelaLogin();
   }//GEN-LAST:event_formWindowOpened
 
   private void mnuContatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuContatosActionPerformed
-    TelaContatos telaContatos = new TelaContatos(this, true);
-    telaContatos.setVisible(true);
+      TelaContatos telaContatos = new TelaContatos(this, true);
+      telaContatos.setVisible(true);
 
-    telaContatos.dispose();
+      telaContatos.dispose();
   }//GEN-LAST:event_mnuContatosActionPerformed
 
-  /**
-   * Método mudaLaF - Muda o Look And Feel da Aplicação
-   *
-   * @param temaLaF
-   */
-  private void mudaLaF(String temaLaF) {
-    try {
+    /**
+     * Método mudaLaF - Muda o Look And Feel da Aplicação
+     *
+     * @param temaLaF
+     */
+    private void mudaLaF(String temaLaF) {
+        try {
 
-      UIManager.setLookAndFeel(temaLaF);
-      SwingUtilities.updateComponentTreeUI(this);
+            UIManager.setLookAndFeel(temaLaF);
+            SwingUtilities.updateComponentTreeUI(this);
 
-    } catch (ClassNotFoundException | InstantiationException |
-        IllegalAccessException | UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException |
+                IllegalAccessException | UnsupportedLookAndFeelException ex) {
 
-      JOptionPane.showMessageDialog(null, "Tema não suportado neste S.O.",
-          "Atenção", JOptionPane.INFORMATION_MESSAGE);
-      mudaLaF( temaDefault );
+            JOptionPane.showMessageDialog(null, "Tema não suportado neste S.O.",
+                    "Atenção", JOptionPane.INFORMATION_MESSAGE);
+            mudaLaF(temaDefault);
+
+        }
 
     }
-
-  }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
